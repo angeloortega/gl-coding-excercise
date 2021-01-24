@@ -52,6 +52,11 @@ const purchaseOrders = [
     receiving: "2020-02-20",
     quantity: 7,
   },
+  {
+    id: "p6",
+    receiving: "2018-02-09",
+    quantity: 22
+  }
 ];
 
 // Sales Orders are orders created by a customer for us to provide a product
@@ -84,6 +89,10 @@ function sortBy(array, attribute) {
   );
 }
 
+function getFurthestDate(date1, date2) {
+  return date1 > date2 ? date1 : date2 
+}
+
 function allocate(salesOrders, purchaseOrders) {
   const orderETAs = [];
   // Since we want to supply customers in the order in which they requested, we must sort by date
@@ -100,7 +109,7 @@ function allocate(salesOrders, purchaseOrders) {
       }
       stock += currentPurchase.quantity;
     }
-    orderETAs.push({ date: currentPurchase.receiving, id: currentSale.id });
+    orderETAs.push({ date: getFurthestDate(currentPurchase.receiving, currentSale.created), id: currentSale.id });
     stock -= currentSale.quantity;
   });
   return orderETAs;
